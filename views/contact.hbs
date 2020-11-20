@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="col">
+        {{> flash }}
+        {{#with contact}}
+            <div class="jumbotron mt-4">
+                <h1 class="display-4">{{prenom}} {{nom}}</h1>
+                <p class="lead">{{email}}</p>
+                <p class="lead">{{tel}}</p>
+                <hr class="my-4">
+                <a class="btn btn-warning btn-sm" href="/contact/{{ _id }}/edit" role="button">Modifier la fiche</a>
+                <a class="btn btn-danger btn-sm" href="/contact/{{ _id }}/delete" role="button">Supprimer le contact</a>
+                <a class="btn btn-primary btn-sm" href="/contacts" role="button">Retourner aux contacts</a>
+            </div>
+        {{/with}}
+    </div>
+</div>

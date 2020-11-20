@@ -1,0 +1,91 @@
+{{#if errors}}
+    <div class="alert alert-danger">
+        {{#each errors}}
+            <i class="fas fa-exclamation-triangle"></i> {{ this.msg }} <br>
+        {{/each}}
+    </div>
+{{/if}}
+
+<!-- Prénom -->
+<div class="form-group">
+    <label>Prénom</label>
+    <input {{#with (ifIn errors "param" "prenom") }}
+    class="form-control is-invalid"
+    {{else}}
+    class="form-control"
+    {{/with}}
+    value="{{ body.prenom }}"
+    name="prenom" placeholder="Prénom." type="text">
+    {{#with (ifIn errors "param" "prenom") }}
+        <div class="invalid-feedback">
+            {{ msg }}
+        </div>
+    {{else}}
+        <small class="form-text text-muted">
+            Saisissez le prénom du contact.
+        </small>
+    {{/with}}
+</div>
+
+<!-- Nom -->
+<div class="form-group">
+    <label>Nom</label>
+    <input {{#with (ifIn errors "param" "nom") }}
+    class="form-control is-invalid"
+    {{else}}
+    class="form-control"
+    {{/with}}
+    value="{{ body.nom }}"
+    name="nom" placeholder="Nom." type="text">
+    {{#with (ifIn errors "param" "nom") }}
+        <div class="invalid-feedback">
+            {{ msg }}
+        </div>
+    {{else}}
+        <small class="form-text text-muted">
+            Saisissez le nom du contact.
+        </small>
+    {{/with}}
+</div>
+
+<!-- Email -->
+<div class="form-group">
+    <label>Email</label>
+    <input {{#with (ifIn errors "param" "email") }}
+    class="form-control is-invalid"
+    {{else}}
+    class="form-control"
+    {{/with}}
+    value="{{ body.email }}"
+    name="email" placeholder="Email." type="text">
+    {{#with (ifIn errors "param" "email") }}
+        <div class="invalid-feedback">
+            {{ msg }}
+        </div>
+    {{else}}
+        <small class="form-text text-muted">
+            Saisissez l'email du contact.
+        </small>
+    {{/with}}
+</div>
+
+<!-- Téléphone -->
+<div class="form-group">
+    <label>Téléphone</label>
+    <input {{#with (ifIn errors "param" "tel") }}
+    class="form-control is-invalid"
+    {{else}}
+    class="form-control"
+    {{/with}}
+    value="{{ body.tel }}"
+    name="tel" placeholder="Téléphone." type="tel">
+    {{#with (ifIn errors "param" "tel") }}
+        <div class="invalid-feedback">
+            {{ msg }}
+        </div>
+    {{else}}
+        <small class="form-text text-muted">
+            Saisissez le numéro de téléphone du contact.
+        </small>
+    {{/with}}
+</div>
