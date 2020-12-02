@@ -95,6 +95,12 @@ app.use((req, res, next) => {
 app.use('/public', express.static(__dirname + '/public'));
 
 /**
+ * Json2XLS Middleware
+ */
+const json2xls = require('json2xls');
+app.use(json2xls.middleware);
+
+/**
  * Mise en Place du Routage
  * @type {Router}
  */

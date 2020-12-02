@@ -11,6 +11,9 @@ router.get('/', defaultController.index);
 router.get('/contacts', defaultController.contacts);
 router.get('/contact/:id', defaultController.contact);
 
+router.get('/export/pdf', contactController.pdf);
+router.get('/export/xlsx', contactController.xlsx);
+
 // -- Afficher, Editer, Supprimer un Contact
 router.get('/ajouter-un-contact', contactController.create_get);
 router.post('/ajouter-un-contact', contactValidator, contactController.create_post);

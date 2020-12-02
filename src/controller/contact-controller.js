@@ -1,5 +1,6 @@
 const {validationResult} = require('express-validator');
 const Contact = require('../models/contact-model');
+const puppeteer = require('puppeteer')
 
 /**
  * Page Créer un Contact
@@ -116,4 +117,74 @@ exports.delete = async (req, res) => {
         req.session.flash = {type: 'danger', message: 'Ooops, suppression impossible !'};
         res.redirect('/contacts');
     }
+}
+
+/**
+ * Générer un PDF
+ * https://github.com/hardeeksharma/html-to-pdf-puppeteer
+ * ------------------------------
+ * npm i puppeteer
+ * @param req
+ * @param res
+ */
+exports.pdf = async (req, res) => {
+
+    try {
+        const contacts = await Contact.find().exec();
+        res.render('contacts-pdf', {'contacts': contacts.map(contact => contact.toJSON())}, (
+            async (err, html) => {
+
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage()
+                await page.setContent(html)
+                const pdfName = `contacts-${Date.now()}.pdf`;
+                await page.pdf({
+                    path: `public/pdf/${pdfName}`,
+                    format: 'A4'
+                });
+
+                await browser.close();
+                res.redirect(`/public/pdf/${pdfName}`);
+            }
+        ));
+
+    } catch (err) {
+        return res.status(500).send({message: err.message});
+    }
+
+}
+
+/**
+ * Générer un fichier Excel
+ *
+ * ------------------------------
+ *
+ * @param req
+ * @param res
+ */
+exports.xlsx = async (req, res) => {
+
+    try {
+
+        const xlsxContacts = [];
+        const contacts = await Contact.find().exec();
+        contacts.map(contact => contact.toJSON())
+
+        for (let contact of contacts) {
+            xlsxContacts.push({
+               id : contact._id,
+               prenom: contact.prenom,
+               nom: contact.nom,
+               email: contact.email,
+               tel: contact.tel,
+            });
+        }
+
+        //res.json(xlsxContacts);
+        res.xls('contacts.xlsx', xlsxContacts);
+
+    } catch (err) {
+        return res.status(500).send({message: err.message});
+    }
+
 }

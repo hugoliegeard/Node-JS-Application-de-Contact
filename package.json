@@ -19,6 +19,8 @@
     "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
     "handlebars-helpers": "^0.10.0",
-    "mongoose": "^5.10.15"
+    "json2xls": "^0.1.2",
+    "mongoose": "^5.10.15",
+    "puppeteer": "^5.5.0"
   }
 }
