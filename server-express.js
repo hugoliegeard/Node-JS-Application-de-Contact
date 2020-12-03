@@ -20,7 +20,7 @@ const hbs = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
 
 helpers.ifIn = (collection = [], param, value) => {
-    for(let i = 0 ; i < collection.length ; i++) {
+    for (let i = 0; i < collection.length; i++) {
         if (collection[i][param] === value) {
             return collection[i];
         }
@@ -57,9 +57,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 const mongoose = require('mongoose');
 const mongoDB = 'mongodb://127.0.0.1/contacts';
 mongoose.connect(mongoDB, {
-   useNewUrlParser: true,
-   useFindAndModify: false,
-   useUnifiedTopology: true
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
 });
 
 const db = mongoose.connection;
@@ -78,7 +78,7 @@ app.use(session({
     secret: 'contact-app',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: {secure: false}
 }));
 
 // Configuration des notifications flash
@@ -99,6 +99,53 @@ app.use('/public', express.static(__dirname + '/public'));
  */
 const json2xls = require('json2xls');
 app.use(json2xls.middleware);
+
+/**
+ * Mise en Place de Passport
+ */
+const passport = require('passport');
+const Strategy = require('passport-local').Strategy;
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+const Contact = require('./src/models/contact-model');
+passport.use(new Strategy(
+    {
+        usernameField: 'email',
+        passwordField: 'password'
+    },
+    (email, password, next) => {
+        // look for the user data
+        Contact.findOne({ email: email }, (err, contact) => {
+
+            // if there is an error
+            if (err) { return next(err); }
+
+            // if contact doesn't exist
+            if (!contact) { return next(null, false); }
+
+            // if the password isn't correct
+            if (contact.password !== password) {
+                return next(null, false);
+            }
+
+            // if the contact is properly authenticated
+            return next(null, contact);
+        });
+    }
+));
+
+passport.serializeUser((contact, next) => {
+    next(null, contact.id);
+});
+
+passport.deserializeUser(function(id, next) {
+    Contact.findById(id, (err, contact) => {
+        if (err) { return next(err); }
+        next(null, contact);
+    });
+});
 
 /**
  * Mise en Place du Routage

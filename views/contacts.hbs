@@ -8,6 +8,10 @@
             <div class="col">
                 <div class="card shadow-sm">
                     {{>flash}}
+                    <div class="alert alert-info m-2">
+                        Bonjour {{ user.prenom }}, vous êtes connecté.
+                            <a href="/security/logout">Déconnexion</a>
+                    </div>
                     <table id="contactTable" class="table">
                         <thead>
                         <tr>

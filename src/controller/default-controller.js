@@ -16,12 +16,19 @@ exports.index = (req, res) => {
  */
 exports.contacts = (req, res) => {
 
+   //  res.send(`Hello ${req.user.prenom}. Your session ID is ${req.sessionID}
+   // and your session expires in ${req.session.cookie.maxAge}
+   // milliseconds.<br><br>
+   // <a href="/logout">Log Out</a><br><br>
+   // <a href="/secret">Members Only</a>`);
+
     Contact.find((err, contacts) => {
 
         if (err) console.log(err);
 
         res.render('contacts', {
-            'contacts': contacts.map(contact => contact.toJSON())
+            'contacts': contacts.map(contact => contact.toJSON()),
+            'user' : req.user.toJSON()
         });
 
     });
